@@ -8,6 +8,7 @@ import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
+import android.widget.ToggleButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,10 +20,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun init() {
-        val button = findViewById(R.id.button) as Button
+        val button = findViewById<Button>(R.id.button)
         button.setOnClickListener({
             onclickButton()
         })
+
+        val sendToggleButton = findViewById<ToggleButton>(R.id.sendToggleButton)
+        sendToggleButton.setOnCheckedChangeListener({ compoundButton, b ->
+
+        })
+
     }
 
     fun onclickButton() {
@@ -41,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     fun sendMotion(motion: Motion) {
         Thread(Runnable {
-            MotionSend().send("${motion.ax},${motion.ay},${motion.az}")
+            MotionSend().sendMotion(motion)
         }).start()
     }
 
@@ -49,34 +56,29 @@ class MainActivity : AppCompatActivity() {
         val motionManager = MotionManager(applicationContext)
         motionManager.startListen()
 
-        val delay: Long = 1000
+        val delayMillis: Long = 2000
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
                 onTime(motionManager.motion)
-                handler.postDelayed(this, delay)
+                handler.postDelayed(this, delayMillis)
             }
-        }, delay)
-
-//        val handler = Handler {
-//
-//        }
-//        val r = object : Runnable {
-//            override fun run() {
-//                showMotionInText(motionManager.motion)
-//                handler.postDelayed(this, 1000)
-//            }
-//        }
-//        handler.post(r)
+        }, delayMillis)
     }
 
     private fun showMotionInText(motion: Motion) {
-        val ax = findViewById(R.id.axTextView) as TextView
+        val ax = findViewById<TextView>(R.id.axTextView)
         ax.text = motion.ax.toString()
-        val ay = findViewById(R.id.ayTextView) as TextView
+        val ay = findViewById<TextView>(R.id.ayTextView)
         ay.text = motion.ay.toString()
-        val az = findViewById(R.id.azTextView) as TextView
+        val az = findViewById<TextView>(R.id.azTextView)
         az.text = motion.az.toString()
+        val wx = findViewById<TextView>(R.id.vxTextView)
+        wx.text = motion.wx.toString()
+        val wy = findViewById<TextView>(R.id.vyTextView)
+        wy.text = motion.wy.toString()
+        val wz = findViewById<TextView>(R.id.vzTextView)
+        wz.text = motion.wz.toString()
     }
 
     fun sendAccelaration() {

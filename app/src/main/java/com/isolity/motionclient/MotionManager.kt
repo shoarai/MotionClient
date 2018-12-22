@@ -21,9 +21,13 @@ class MotionManager {
 
     fun startListen() {
         val accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val gypro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-        sensorManager.registerListener(motionEventListener, accel, SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(motionEventListener, gypro, SensorManager.SENSOR_DELAY_GAME);
+        accel.apply {
+            sensorManager.registerListener(motionEventListener, accel, SensorManager.SENSOR_DELAY_GAME);
+        }
+        val gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        gyro.apply {
+            sensorManager.registerListener(motionEventListener, gyro, SensorManager.SENSOR_DELAY_GAME);
+        }
     }
 
     private fun setSensorEventListener() {

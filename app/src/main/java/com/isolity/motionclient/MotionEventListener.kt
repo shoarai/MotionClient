@@ -39,19 +39,9 @@ class MotionEventListener : SensorEventListener {
             else -> {
             }
         }
-
-//        switch (sensorEvent.sensor.getType()){
-//            case Sensor.TYPE_LIGHT:
-//            //処理を記載
-//            　　　　　　　　　　break;
-//            case Sensor.TYPE_ACCELEROMETER:
-//            　　　　　　　　　　//処理を記載
-//            　　　　　　　　default:
-//            　　　　　　　　　　//処理を記載
-//            　　　　　　　　　　break;
-//            　　　　　　}
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        // No processing
     }
 }
