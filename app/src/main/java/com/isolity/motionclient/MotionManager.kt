@@ -20,13 +20,19 @@ class MotionManager {
     }
 
     fun startListen() {
+        var samplingPeriodUs = SensorManager.SENSOR_DELAY_GAME
+//        SensorManager.SENSOR_DELAY_FASTEST	0ms
+//        SensorManager.SENSOR_DELAY_GAME	20ms
+//        SensorManager.SENSOR_DELAY_UI	60ms
+//        SensorManager.SENSOR_DELAY_NORMAL	200ms
+
         val accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         accel.apply {
-            sensorManager.registerListener(motionEventListener, accel, SensorManager.SENSOR_DELAY_GAME);
+            sensorManager.registerListener(motionEventListener, accel, samplingPeriodUs)
         }
         val gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         gyro.apply {
-            sensorManager.registerListener(motionEventListener, gyro, SensorManager.SENSOR_DELAY_GAME);
+            sensorManager.registerListener(motionEventListener, gyro, samplingPeriodUs)
         }
     }
 

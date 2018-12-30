@@ -12,19 +12,36 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <Button
-            android:id="@+id/button"
+        <EditText
+            android:id="@+id/ipAddressText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="192.168.179.3"
+            tools:layout_editor_absoluteY="207dp" />
+
+        <EditText
+            android:id="@+id/portText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="8888" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="16dp" />
 
-        <ToggleButton
-            android:id="@+id/sendToggleButton"
+        <Button
+            android:id="@+id/stopButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ToggleButton" />
+            android:text="Stop" />
 
         <TextView
             android:id="@+id/axTextView"

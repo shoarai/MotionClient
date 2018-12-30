@@ -1,14 +1,11 @@
 package com.isolity.motionclient
 
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.ToggleButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,51 +16,78 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    fun init() {
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener({
-            onclickButton()
-        })
-
-        val sendToggleButton = findViewById<ToggleButton>(R.id.sendToggleButton)
-        sendToggleButton.setOnCheckedChangeListener({ compoundButton, b ->
-
-        })
-
+    private val startButton by lazy {
+        findViewById<Button>(R.id.startButton)
+    }
+    private val stopButton by lazy {
+        findViewById<Button>(R.id.stopButton)
+    }
+    private val ipAddressText by lazy {
+        findViewById<TextView>(R.id.ipAddressText)
+    }
+    private val portText by lazy {
+        findViewById<TextView>(R.id.portText)
     }
 
-    fun onclickButton() {
-        lisentenMotion()
-//        sendAccelaration()
-//        Thread(Runnable {
-//            MotionSend().send("Hellow")
-//        }).start()
+    private val motionManager by lazy {
+        MotionManager(applicationContext)
+    }
+    val motionSender = MotionSend()
+
+    private fun init() {
+        startButton.setOnClickListener({
+            onclickStartButton()
+        })
+        stopButton.setOnClickListener({
+            stopListenMotion()
+        })
     }
 
+    fun onclickStartButton() {
+        startLisentenMotion()
+    }
 
     fun onTime(motion: Motion) {
-        showMotionInText(motion)
         sendMotion(motion)
+        showMotionInText(motion)
     }
 
     fun sendMotion(motion: Motion) {
         Thread(Runnable {
-            MotionSend().sendMotion(motion)
+            motionSender.sendMotion(motion)
         }).start()
     }
 
-    fun lisentenMotion() {
-        val motionManager = MotionManager(applicationContext)
+    var running: Boolean = false
+
+    private fun startLisentenMotion() {
+//        motionSender.setAddress(ipAddressText.text.toString())
+//        motionSender.port = Integer.parseInt(portText.text.toString())
+        running = true
         motionManager.startListen()
 
-        val delayMillis: Long = 2000
+        val delayMillis: Long = 100
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
+                if (!running) {
+                    return
+                }
                 onTime(motionManager.motion)
                 handler.postDelayed(this, delayMillis)
             }
         }, delayMillis)
+
+        startButton.visibility = View.GONE
+        stopButton.visibility = View.VISIBLE
+    }
+
+    private fun stopListenMotion() {
+        running = false
+        motionManager.stopListen()
+
+        startButton.visibility = View.VISIBLE
+        stopButton.visibility = View.GONE
     }
 
     private fun showMotionInText(motion: Motion) {
@@ -79,33 +103,5 @@ class MainActivity : AppCompatActivity() {
         wy.text = motion.wy.toString()
         val wz = findViewById<TextView>(R.id.vzTextView)
         wz.text = motion.wz.toString()
-    }
-
-    fun sendAccelaration() {
-        val mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val mSensor: Sensor? = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val gypro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-
-        val motionEventListener = MotionEventListener()
-        motionEventListener.onMotionChanged = { accelarationX: Float, accelarationY: Float, accelarationZ: Float, sensorType: Int ->
-            val ax = findViewById(R.id.axTextView) as TextView
-            ax.text = accelarationX.toString()
-            val ay = findViewById(R.id.ayTextView) as TextView
-            ay.text = accelarationY.toString()
-            val az = findViewById(R.id.azTextView) as TextView
-            az.text = accelarationZ.toString()
-
-            Thread(Runnable {
-                MotionSend().send("${accelarationX},${accelarationY},${accelarationZ}")
-            }).start()
-        }
-        mSensorManager.registerListener(motionEventListener, mSensor, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(motionEventListener, gypro, SensorManager.SENSOR_DELAY_GAME);
-
-
-//        SensorManager.SENSOR_DELAY_FASTEST	0ms
-//        SensorManager.SENSOR_DELAY_GAME	20ms
-//        SensorManager.SENSOR_DELAY_UI	60ms
-//        SensorManager.SENSOR_DELAY_NORMAL	200ms
     }
 }

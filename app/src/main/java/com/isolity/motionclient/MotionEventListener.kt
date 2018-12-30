@@ -36,8 +36,6 @@ class MotionEventListener : SensorEventListener {
                         event.values[2],
                         event.sensor.type)
             }
-            else -> {
-            }
         }
     }
 
