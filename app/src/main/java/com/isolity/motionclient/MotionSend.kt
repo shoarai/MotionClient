@@ -10,7 +10,7 @@ import java.net.InetAddress
 
 class MotionSend {
 
-//    var port = 8891
+    var port = 8894
 //        set
 //    //    var address = InetAddress.getByName("192.168.179.3")
 //    var address = InetAddress.getByName("10.0.2.2")
@@ -26,7 +26,7 @@ class MotionSend {
     }
 
     fun send(text: String) {
-        val port = 8891
+//        val port = 8891
 //        val address = InetAddress.getByName("10.0.2.2")
         val address = InetAddress.getByName("192.168.179.3")
         val buff = text.toByteArray()

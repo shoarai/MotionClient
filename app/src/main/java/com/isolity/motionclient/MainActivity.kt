@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startLisentenMotion() {
 //        motionSender.setAddress(ipAddressText.text.toString())
-//        motionSender.port = Integer.parseInt(portText.text.toString())
+        motionSender.port = Integer.parseInt(portText.text.toString())
         running = true
         motionManager.startListen()
 
